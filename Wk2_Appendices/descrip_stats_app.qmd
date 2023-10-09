@@ -1,0 +1,222 @@
+---
+title: "Descriptive Statistics"
+subtitle: "Appendices"
+institute: "Ethan Marzban (for DS Collab)"
+author: "October 12, 2023"
+footer: "[dscollab.github.io](https://dscollab.github.io)"
+logo: "main_logo2.png"
+format: 
+  revealjs:
+    theme: slides.scss
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: true 
+    chalkboard: true
+    html-math-method: mathjax
+editor: visual
+execute:
+  freeze: auto
+---
+
+# Appendix 1: Mean vs. Median
+
+## Robustness
+
+-   During the workshop, I mentioned that the median is a more *robust* description of central tendency than the mean.
+
+    -   I briefly mentioned that this means the median is less affected by outliers than the mean.
+
+-   To illustrate this a little more explicitly, lets consider a set of numbers $$ S = \{1, 2, 3, 4\} $$
+
+-   We will then add various numbers to this set, and see how this affects both the mean and the median.
+
+## Illustration
+
+-   First, note that $\overline{s} = 2.5$ and $\mathrm{median}(S) = 2.5$.
+
+-   Now, suppose we construct a new set $S'$ defined to the the set $S$ plus the additional value $s_5 = 5$.
+
+    -   That is, $S' = \{1, 2, 3, 4, 5\}$.
+
+-   The mean of $S'$ is 3, and the median of $S'$ is also 3.
+
+-   Hence, the addition of the point $s_5$ caused both the mean and median to increase by 0.5 units.
+
+## Illustration
+
+-   Now, suppose instead of adding the number $s_5 = 5$ we instead added the number $s_5 = 6$.
+
+    -   That is, $S' = \{1, 2, 3, 4, 6\}$.
+
+-   Now, the mean of $S'$ is 3.2, whereas the median of $S'$ is 3.
+
+-   So, the addition of $s_5$ has caused the mean to increase by $0.7$ but caused the median to still only increase by 0.5 units.
+
+## Illustration
+
+-   If instead of adding 6 we had added 7 to obtain $S' = \{1, 2, 3, 4, 7\}$ the mean would be $3.4$ whereas the median would still be $3$.
+
+-   We can imagine continuing this line of thinking for various values of $s_5$.
+
+::: fragment
+| Set                 | Mean  | Median |
+|---------------------|-------|--------|
+| $\{1, 2, 3, 4\}$    | $2.5$ | $2.5$  |
+| $\{1, 2, 3, 4, 5\}$ | $3$   | $3$    |
+| $\{1, 2, 3, 4, 6\}$ | $3.2$ | $3$    |
+| $\{1, 2, 3, 4, 7\}$ | $3.4$ | $3$    |
+:::
+
+## Illustration
+
+-   We can rephrase our findings to be in therms of the *change* in mean and median of $S'$ (as compared to $S$):
+
+::: fragment
+| $s_5$ | Change in Mean | Change in Median |
+|-------|----------------|------------------|
+| $5$   | $0.5$          | $0.5$            |
+| $6$   | $0.7$          | $1$              |
+| $7$   | $0.9$          | $1$              |
+| $8$   | $1.1$          | $1$              |
+:::
+
+-   So, the larger $s_5$ is, the larger the change in the mean. However, the change in the median remains relatively fixed, regardless of how large $s_5$ is!
+
+## Illustration
+
+-   This is, effectively, the basic idea of robustness.
+
+-   The mean changes significantly based on which point(s) we add to our data, whereas the median does not.
+
+-   The notion of robustness isn't only tied to measures of central tendency; for example, the IQR turns out to be a more robust description of spread than the variance/standard deviation.
+
+## Connections
+
+-   The notion of robustness has far-reaching consequences. For example, when providing summary measures of variables with heavy-tails, the median is more often used for the mean.
+
+-   As a concrete example, consider `income`: the distribution of incomes has a very large right-tail as there are a few individuals with incredibly high amounts of wealth.
+
+    -   Consequently, most analysists report/consider the *median* income of an area, as opposed to the *mean* income.
+
+# Linearity vs. Nonlinearity
+
+## Linearity of Functions
+
+-   Let's start by talking about linearity in the context of functions.
+
+-   Consider two functions `f()` and `g()`, plotted below:
+
+::: fragment
+```{r, fig.height = 4}
+library(tidyverse)
+library(ggthemes)
+library(gridExtra)
+
+f <- function(x){return(-1.5*x)}
+p1 <- data.frame(x = seq(0, 4, by = 0.1)) %>%
+  ggplot(aes(x = x)) +
+  stat_function(fun = f, col = "blue", linewidth = 1) +
+  theme_economist_white(base_size = 24) +
+  ggtitle("f(x)") +
+  theme(panel.background = element_rect("white"),
+        plot.background = element_rect(fill = "white"),
+        axis.title.y = element_text(size = 16,
+                                    margin = margin(
+                                      t = 0, 
+                                      r = 10,
+                                      b = 0, 
+                                      l = 0)),
+        axis.title.x = element_text(size = 16,
+                                    margin = margin(
+                                      t = 10, 
+                                      r = 0,
+                                      b = 0, 
+                                      l = 0)),
+        title = element_text(size = 16)
+  )
+
+g <- function(x){return(0.1/((x + 0.5)^0.25))}
+p2 <- data.frame(x = seq(0, 4, by = 0.1)) %>%
+  ggplot(aes(x = x)) +
+  stat_function(fun = g, col = "blue", linewidth = 1) +
+  theme_economist_white(base_size = 24) +
+  ggtitle("g(x)") +
+  theme(panel.background = element_rect("white"),
+        plot.background = element_rect(fill = "white"),
+        axis.title.y = element_text(size = 16,
+                                    margin = margin(
+                                      t = 0, 
+                                      r = 10,
+                                      b = 0, 
+                                      l = 0)),
+        axis.title.x = element_text(size = 16,
+                                    margin = margin(
+                                      t = 10, 
+                                      r = 0,
+                                      b = 0, 
+                                      l = 0)),
+        title = element_text(size = 16)
+  ) 
+
+grid.arrange(p1, p2, ncol = 2)
+```
+:::
+
+------------------------------------------------------------------------
+
+::: nonincremental
+-   The key to determining linearity is to check the **rate of change**.
+:::
+
+-   For a linear function: a one-unit change in `x` corresponds to the same amount of change in `y`, regardless of where the change in `x` occurs.
+
+    -   I.e. as `x` increases from 0 to 1, `y` should increase/decrease by the same amount as if `x` had increased from, say, `2` to `3`.
+
+## Linearity
+
+-   For the function `f` above, this *is* the case:
+
+::: fragment
+```{r, fig.height = 3.5}
+p1
+```
+:::
+
+::: {.fragment style="font-size:26px"}
+|                |                    |                                    |
+|:--------------:|:------------------:|:----------------------------------:|
+| `x`: $0 \to 1$ | `y`: $0 \to -1.5$  |  $\Delta$`y`: $(-1.5 - 0) = -1.5$  |
+| `x`: $2 \to 3$ | `y`: $-3 \to -4.5$ | $\Delta$`y`: $(-4.5 + 3.5) = -1.5$ |
+:::
+
+## Linearity
+
+-   For the function `g` above, this is *not* the case:
+
+::: fragment
+```{r, fig.height = 3.5}
+p2
+```
+:::
+
+::: {.fragment style="font-size:26px"}
+|                |                       |                                        |
+|:---------------------:|:------------------------:|:---------------------:|
+| `x`: $0 \to 1$ | `y`: $0.12 \to 0.09$  |  $\Delta$`y`: $(0.09 - 0.12) = -0.03$  |
+| `x`: $2 \to 3$ | `y`: $0.08 \to 0.073$ | $\Delta$`y`: $(0.073 - 0.08) = -0.007$ |
+:::
+
+## Calculus Aside
+
+-   If you are familiar with calculus, you might note that the above discussion is really just a discussion about derivatives.
+
+-   A function $f()$ is linear if and only if its derivative is constant; otherwise it is nonlinear.
+
+## Linearity in Trends/Associations
+
+-   The notion of in the context of trends is pretty much the same: if a one-unit change in `x` corresponds to the same amount of change in `y` everywhere, then we say that the trend is linear. Otherwise, we say the trend is nonlinear.
+
+-   Also, as mentioned during the workshop, we can extend this language to describe the *association* between two variables.
+
+    -   For example, if the scatterplot of two variables displays a positive linear trend, we might say that the two variables have a positive linear *association*.
