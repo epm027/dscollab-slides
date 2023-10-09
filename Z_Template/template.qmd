@@ -1,0 +1,123 @@
+---
+title: "Title Here"
+subtitle: "Subtitle"
+institute: "Author/Host (for DS Collab)"
+author: "Date"
+footer: "[dscollab.github.io](https://dscollab.github.io)"
+logo: "main_logo2.png"
+format: 
+  revealjs:
+    theme: slides.scss
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: true 
+    chalkboard: true
+    html-math-method: mathjax
+editor: visual
+execute:
+  freeze: auto
+---
+
+```{r}
+#| include: false
+
+# figure options
+knitr::opts_chunk$set(
+  fig.width = 10, fig.asp = 0.618, out.width = "90%",
+  fig.retina = 3, dpi = 300, fig.align = "center"
+)
+```
+
+
+# Section Header
+
+## Slide Title
+
+- Point 1
+
+    - Subpoint 1
+    
+- Point 2
+
+
+## Callouts
+
+:::{.callout-important}
+Can be used to highlight important information
+:::
+
+:::{.fragment}
+:::{.callout-caution}
+Something to note!
+:::
+:::
+
+:::{.fragment}
+:::{.callout-note}
+More information at [this link](https://quarto.org/docs/authoring/callouts.html)
+:::
+:::
+
+## Integrated Plots
+
+```{r}
+#| echo: False
+library(tidyverse)
+library(ggthemes)
+
+set.seed(123)
+x <- rnorm(100)
+y <- x^2 + rnorm(100)
+
+data.frame(x, y) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point(size = 3) +
+  theme_economist_white(base_size = 24) +
+  theme(panel.background = element_rect("white"),
+        plot.background = element_rect(fill = "white"),
+        axis.title.y = element_text(size = 16,
+                                    margin = margin(
+                                      t = 0, 
+                                      r = 10,
+                                      b = 0, 
+                                      l = 0)),
+        axis.title.x = element_text(size = 16,
+                                    margin = margin(
+                                      t = 10, 
+                                      r = 0,
+                                      b = 0, 
+                                      l = 0)),
+        title = element_text(size = 18),
+        legend.position = "right"
+  ) +
+  geom_smooth(method = "lm", 
+              formula = "y ~ poly(x, 2)",
+              linewidth = 2,
+              aes(colour = "quadratic fit")) +
+  xlab("x") +
+  ylab("y") +
+  ggtitle("Title") +
+  labs(colour = "Legend")
+```
+
+## Multiple Columns
+
+::::{.columns}
+
+:::{.column width="33%"}
+Text to the left
+![](main_logo2.png)
+:::
+
+
+:::{.column width="33%"}
+Text in the middle
+![](main_logo2.png)
+:::
+
+:::{.column width="33%"}
+Text to the right
+![](main_logo2.png)
+:::
+::::
