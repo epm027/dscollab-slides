@@ -371,13 +371,14 @@ data.frame(table(penguins$species)) %>%
 
 ------------------------------------------------------------------------
 
-## Let's Hear From the Audience! {style="font-size:30px"}
+## Let's Hear From the Audience! {style="font-size:28px"}
 
 ::: nonincremental
 -   Given observations of 120 different PSTAT students' favorite color (summarized below), pproximately what proportion of the students in the sample reported either blue or gold as their favorite color?
 
-```{r, fig.height = 3.4, fig.width = 10}
+```{r}
 #| echo: false
+#| fig-height: 3
 
 set.seed(123)
 cols <- sample(c("red", "blue", "green", "orange", "purple", "gold", "other"), 120, replace = T, prob = c(0.15, 0.15, 0.13, 0.14, 0.16, 0.13, 0.14))
@@ -799,7 +800,7 @@ gentoo %>%
 :::
 :::
 
-## Trend
+## Trend {style="font-size:30px"}
 
 -   This is an example of what we call a [trend]{style="color:red"}; specifically, a [positive linear trend]{style="color:red"}
 
